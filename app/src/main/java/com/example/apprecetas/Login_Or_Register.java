@@ -11,6 +11,6 @@ public class Login_Or_Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_or_register_activity);
 
-        //g
+        
     }
 }
