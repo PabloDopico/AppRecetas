@@ -50,7 +50,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="30dp"
-        android:hint="Contraseña"
+        android:hint="Contraseña (min. 6 caracteres)"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

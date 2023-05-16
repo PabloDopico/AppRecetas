@@ -97,6 +97,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        // llamamos al metodo que comprueba la contraseña para asegurarnos que la contraseña cumple con los requisitos necesarios
+        if (!comprobarContraseña(contraseña)) {
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(email, contraseña).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -114,13 +119,48 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     Intent intent = new Intent(RegisterActivity.this, Login_Or_Register.class);
                             startActivity(intent);
-                            finish();
                         } else {
                             // Si hay error en la creacion del usuario mostramos mensaje de error
-                            Toast.makeText(RegisterActivity.this, "Se ha producido un error en la creación del usuario", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Se ha producido un error en la creación del usuario", Toast.LENGTH_SHORT).show();
                         }
                     }
         });
 
     }
+
+    private boolean comprobarContraseña(String contraseña) {
+        if (contraseña.length() < 6) {
+            Toast.makeText(getApplicationContext(), "La contraseña debe tener como minimo 6 caracteres", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        boolean tieneNumero = false;
+        boolean tieneMayus = false;
+
+        for (int i = 0; i < contraseña.length(); i++) {
+            char c = contraseña.charAt(i);
+            if (Character.isDigit(c)) {
+                tieneNumero = true;
+            } else if (Character.isUpperCase(c)) {
+                tieneMayus = true;
+            }
+
+            if (tieneNumero && tieneMayus) {
+                break;
+            }
+        }
+
+        if (!tieneNumero) {
+            Toast.makeText(getApplicationContext(), "La contraseña debe contener al menos un número", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!tieneMayus) {
+            Toast.makeText(getApplicationContext(), "La contraseña debe contener al menos una letra mayúscula", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
 }
