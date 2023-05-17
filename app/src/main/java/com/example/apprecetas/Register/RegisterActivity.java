@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText contraseñaEditText;
     private EditText confirmarContraseñaEditText;
+    private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
 
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email);
         contraseñaEditText = findViewById(R.id.contraseña);
         confirmarContraseñaEditText = findViewById(R.id.confirmarContraseña);
+        progressBar = findViewById(R.id.progressbar);
 
         Button registrarseButton = findViewById(R.id.register);
         registrarseButton.setOnClickListener(new View.OnClickListener() {
@@ -67,10 +70,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registrarUsuario() {
+
         String nombreUsuario = nombreUsuarioEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String contraseña = contraseñaEditText.getText().toString().trim();
         String confirmarContraseña = confirmarContraseñaEditText.getText().toString().trim();
+
+
+        progressBar.setVisibility(View.VISIBLE);
 
         if (TextUtils.isEmpty(nombreUsuario)) {
             Toast.makeText(getApplicationContext(), "Por favor, introduce el nombre de usuario", Toast.LENGTH_SHORT).show();
@@ -105,6 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, contraseña).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Se ha creado el usuario "+nombreUsuario+" correctamente", Toast.LENGTH_SHORT).show();
 
