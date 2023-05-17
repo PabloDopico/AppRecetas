@@ -7,6 +7,7 @@
     tools:context=".Register.RegisterActivity">
 
     <TextView
+        android:textColor="@color/purple_500"
         android:id="@+id/titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,18 +50,32 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="30dp"
-        android:hint="Contraseña (min. 6 caracteres)"
+        android:hint="Contraseña"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <TextView
+
+        android:textSize="13dp"
+        android:text="Debe tener mayúscula/s, minúscula/s y número/s. "
+        app:layout_constraintEnd_toEndOf="@id/contraseña"
+        app:layout_constraintStart_toStartOf="@id/contraseña"
+        app:layout_constraintTop_toBottomOf="@+id/contraseña"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:textColor="#57000000">
+
+    </TextView>
 
     <EditText
         android:id="@+id/confirmarContraseña"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
         android:hint="Confirmar contraseña"
         android:inputType="textPassword"
