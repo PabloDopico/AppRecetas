@@ -85,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Por favor, introduce el email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Por favor, introduce el correo electronico", Toast.LENGTH_SHORT).show();
             return;
         }
 
