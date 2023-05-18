@@ -22,12 +22,20 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private EditText emailEditText, passwordEditText;
+    private Button loginButton;
+    private TextView registerTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView registerTextView = findViewById(R.id.register);
+        emailEditText = findViewById(R.id.usuarioEmail);
+        passwordEditText = findViewById(R.id.contraseña);
+        loginButton = findViewById(R.id.login);
+        registerTextView = findViewById(R.id.register);
+
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,47 +44,44 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = ((EditText) findViewById(R.id.usuarioEmail)).getText().toString().trim();
-                String password = ((EditText) findViewById(R.id.contraseña)).getText().toString().trim();
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(LoginActivity.this, "Por favor introduce el correo electronico", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(LoginActivity.this, "Por favor introduce la contraseña", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, "Se ha iniciado sesión correctamente", Toast.LENGTH_SHORT).show();
-
-                                    Intent intent = new Intent(LoginActivity.this, Login_Or_Register.class);
-                                    startActivity(intent);
-                                } else {
-                                    String errorMessage = task.getException().getMessage();
-                                    Toast.makeText(LoginActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();}
-                            }
-                        });
+                loginUser();
             }
         });
-
-
-
-
-
     }
 
+    private void loginUser() {
 
+        String email = emailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
 
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(LoginActivity.this, "Por favor introduce el correo electrónico", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(LoginActivity.this, "Por favor introduce la contraseña", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Se ha iniciado sesión correctamente", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(LoginActivity.this, Login_Or_Register.class);
+                            startActivity(intent);
+                        } else {
+                            String errorMessage = task.getException().getMessage();
+                            Toast.makeText(LoginActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 }
