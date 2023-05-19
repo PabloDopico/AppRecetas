@@ -23,8 +23,9 @@
 
 # Resolución de problemas frecuentes
 
-Es posible que algunas peticiones, como el registro y el inicio de sesión de usuarios, tarden hasta 15 minutos.
-Para solucionar este problema, se recomienda utilizar un dispositivo hardware, como un teléfono móvil.
+Es posible que al realizar algunas peticiones desde un emulador en Android Studio, como el registro y el inicio de sesión de usuarios, pueda tartar bastante tiempo.
+
+Para solucionar este problema, se recomienda utilizar un dispositivo hardware, como un teléfono móvil, como se indica en el enlace siguiente:
 
 🔴🔎[Cómo ejecutar apps de Android en un dispositivo hardware](https://developer.android.com/studio/run/device?hl=es-419)
 
