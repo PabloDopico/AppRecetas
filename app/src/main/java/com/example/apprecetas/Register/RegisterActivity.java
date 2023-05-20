@@ -5,7 +5,9 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -119,10 +121,15 @@ public class RegisterActivity extends AppCompatActivity {
                             // Si se crea el usuario correctamente
                             FirebaseUser usuario = mAuth.getCurrentUser();
                             // Cambiamos el perfil del usuario y añadimos su  username
-                            UserProfileChangeRequest modificarPerfil = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(nombreUsuario)
-                                    .build();
+                            UserProfileChangeRequest modificarPerfil = new UserProfileChangeRequest.Builder().setDisplayName(nombreUsuario).build();
                             usuario.updateProfile(modificarPerfil);
+
+                            //guardamos si esta logeado  en las sharedpreferences
+                            SharedPreferences sharedPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putBoolean("estaLogeado", true);
+                            editor.apply();
+
                             // Al registrar al usuario volvemos a la pantalla principal (modificar por el HomeActivity cuando este creado)
 
                                     Intent intent = new Intent(RegisterActivity.this, Login_Or_Register.class);
