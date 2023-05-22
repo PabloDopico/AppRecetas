@@ -3,7 +3,9 @@ package com.example.apprecetas.Login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.apprecetas.Login_Or_Register;
+import com.example.apprecetas.MainActivity;
 import com.example.apprecetas.R;
 import com.example.apprecetas.Register.RegisterActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,6 +42,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        SharedPreferences sharedPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+        boolean estaLogeado = sharedPref.getBoolean("estaLogeado", false);
+
+        if (estaLogeado) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         emailEditText = findViewById(R.id.usuarioEmail);
         passwordEditText = findViewById(R.id.contraseña);
@@ -92,7 +105,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Se ha iniciado sesión correctamente", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(LoginActivity.this, Login_Or_Register.class);
+                            //guardamos si esta logeado en las sharedpreferences
+                            SharedPreferences sharedPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putBoolean("estaLogeado", true);
+                            editor.apply();
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
                             String errorMessage = task.getException().getMessage();
