@@ -58,6 +58,8 @@ public class HomeFragment extends Fragment {
                             Recipe receta = new Recipe(titulo, imagen);
                             listaRecetas.add(receta);
                         }
+                        recipeAdapter.notifyDataSetChanged(); // Notify the adapter of the data change
+
                     }
                 });
     }
