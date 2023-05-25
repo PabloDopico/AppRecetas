@@ -3,7 +3,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_gravity="center"
+
+            android:padding="10dp"
+            android:id="@+id/nombreUsuario"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Usuario"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            />
+
+        <ImageButton
+            android:layout_gravity="center"
+
+            android:onClick="cambiarNombreUsuario"
+            android:id="@+id/botonEditNombre"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/edit_icon"
+            android:scaleType="centerCrop"
+            android:background="@android:color/transparent"
+            android:contentDescription="Editar nombre de usuario"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:padding="10dp"
+            android:id="@+id/correo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Correo:"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:layout_gravity="center"
+            android:onClick="cambiarCorreo"
+            android:id="@+id/botonEditCorreo"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Editar correo electrónico"
+            android:scaleType="centerCrop"
+            android:src="@drawable/edit_icon" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/cerrarSesion"
@@ -13,18 +80,18 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:background="@android:color/transparent"
-        android:padding="16dp"
-        android:onClick="cerrarSesion" />
+        android:onClick="cerrarSesion"
+        android:textSize="15dp"/>
 
     <Button
         android:id="@+id/borrarCuenta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Borrar cuenta"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
         android:background="@android:color/transparent"
-        android:padding="16dp"
-        android:onClick="borrarCuenta" />
+        android:onClick="borrarCuenta"
+        android:textSize="15dp"/>
 
 </LinearLayout>

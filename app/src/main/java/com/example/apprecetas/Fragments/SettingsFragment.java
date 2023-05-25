@@ -2,6 +2,7 @@ package com.example.apprecetas.Fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,23 +12,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.apprecetas.Login.LoginActivity;
 import com.example.apprecetas.Login_Or_Register;
 import com.example.apprecetas.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SettingsFragment extends Fragment {
-    private Button cerrarSesionButton;
-    private Button borrarCuentaButton;
     private FirebaseAuth firebaseAuth;
-
+    private TextView nombreUsuario;
+    private TextView correoElectronico;
     public SettingsFragment() {
 
     }
@@ -40,8 +46,26 @@ public class SettingsFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        Button cerrarSesionButton = view.findViewById(R.id.cerrarSesion);
+        nombreUsuario = view.findViewById(R.id.nombreUsuario);
+        correoElectronico = view.findViewById(R.id.correo);
 
+        // mostramos el nombre de la cuenta y el correo en la pantalla al entrar en la pantalla
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser usuario = firebaseAuth.getCurrentUser();
+        if (usuario != null) {
+            String nombreUsuarioTexto = usuario.getDisplayName();
+            String correoTexto = usuario.getEmail();
+
+            if (nombreUsuarioTexto != null) {
+                nombreUsuario.setText("Usuario: " + nombreUsuarioTexto);
+            }
+
+            if (correoTexto != null) {
+                correoElectronico.setText("Correo: " + correoTexto);
+            }
+        }
+
+        Button cerrarSesionButton = view.findViewById(R.id.cerrarSesion);
         cerrarSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,14 +74,29 @@ public class SettingsFragment extends Fragment {
         });
 
         Button borrarCuentaButton = view.findViewById(R.id.borrarCuenta);
-
-
         borrarCuentaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 borrarCuenta();
             }
         });
+
+        ImageButton botonEditNombre = view.findViewById(R.id.botonEditNombre);
+        botonEditNombre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarNombreUsuario();
+            }
+        });
+
+        ImageButton botonEditCorreo = view.findViewById(R.id.botonEditCorreo);
+        botonEditCorreo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarCorreo();
+            }
+        });
+
 
         return view;
     }
@@ -74,6 +113,7 @@ public class SettingsFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean("estaLogeado", false);
         editor.apply();
+
         // al cerrar sesión volvemos a la pantalla de login o registro
         Intent intent = new Intent(getActivity(), Login_Or_Register.class);
         startActivity(intent);
@@ -135,6 +175,90 @@ public class SettingsFragment extends Fragment {
             contraseñaDialogBuilder.show();
         });
         builder.setNegativeButton("No", (dialog, which) -> {
+        });
+        builder.show();
+    }
+
+
+    private void cambiarNombreUsuario() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Editar nombre de usuario");
+
+        EditText editNombreDialog = new EditText(getActivity());
+        editNombreDialog.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(editNombreDialog);
+
+        builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String nuevoNombre = editNombreDialog.getText().toString().trim();
+
+                FirebaseUser usuario = firebaseAuth.getCurrentUser();
+                if (usuario != null) {
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(nuevoNombre)
+                            .build();
+
+                    usuario.updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void v) {
+                                    nombreUsuario.setText("Usuario: " +nuevoNombre);
+                                    Toast.makeText(getActivity(), "Nombre de usuario cambiado correctamente: "+nuevoNombre, Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), "Error al cambiar el nobmre de usuario", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void cambiarCorreo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Editar correo electrónico");
+
+        EditText editCorreoDialog = new EditText(getActivity());
+        editCorreoDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+
+        builder.setView(editCorreoDialog);
+        builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String nuevoCorreo = editCorreoDialog.getText().toString().trim();
+                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                if (currentUser != null) {
+                    currentUser.updateEmail(nuevoCorreo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void v) {
+                                    correoElectronico.setText("Correo: " +nuevoCorreo);
+                                    Toast.makeText(getActivity(), "Correo electrónico cambiado correctamente: " + nuevoCorreo, Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), "Error al cambiar el correo", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
         });
         builder.show();
     }
