@@ -1,13 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_home"
-        android:title="Menú Principal" />
+        android:icon="@drawable/casa"
+        android:title="Inicio"
+        />
 
     <item
         android:id="@+id/menu_favorites"
-        android:title="Favoritos" />
+        android:icon="@drawable/corazon"
+        android:title="Favoritos"
+        />
 
     <item
         android:id="@+id/menu_settings"
-        android:title="Ajustes" />
+        android:icon="@drawable/tuerca"
+        android:title="Ajustes"
+        />
 </menu>
