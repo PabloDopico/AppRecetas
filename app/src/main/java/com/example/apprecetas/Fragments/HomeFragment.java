@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
     private RecipeAdapter recipeAdapter;
     private List<Recipe> listaRecetas;
     private FirebaseFirestore firebaseFirestore;
+    private ProgressBar progressBar;
 
     public HomeFragment() {
     }
@@ -39,6 +41,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = v.findViewById(R.id.recyclerView);
+        progressBar = v.findViewById(R.id.progressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listaRecetas = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(listaRecetas, this);
@@ -50,6 +53,9 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
 
         //obtenemos la coleccion "recetas" de la base de datos de firestore
         firebaseFirestore.collection("recetas").get().addOnCompleteListener(
@@ -65,6 +71,8 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
                         }
                         recipeAdapter.notifyDataSetChanged();
                     }
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 });
     }
 

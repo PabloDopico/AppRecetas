@@ -7,18 +7,19 @@
     tools:context=".Register.RegisterActivity">
 
     <TextView
-        android:textColor="@color/purple_500"
         android:id="@+id/titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Crear cuenta"
-        android:textSize="24sp"
         android:layout_marginTop="15dp"
+        android:text="Crear cuenta"
+        android:textColor="#831DB6"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:textColorHint="#86831DB6"
         android:id="@+id/nombreUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titulo" />
 
     <EditText
+        android:textColorHint="#86831DB6"
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,6 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/nombreUsuario" />
 
     <EditText
+        android:textColorHint="#86831DB6"
         android:id="@+id/contraseña"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,11 +69,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textStyle="italic"
-        android:textColor="#57000000">
+        android:textColor="#86831DB6">
 
     </TextView>
 
     <EditText
+        android:textColorHint="#86831DB6"
         android:id="@+id/confirmarContraseña"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,14 +91,16 @@
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registrarse"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/confirmarContraseña"
+        android:backgroundTint="#831DB6"
+        android:text="Registrarse"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/confirmarContraseña" />
 
 
     <TextView
+
         android:id="@+id/yaTienesCuenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -111,7 +117,7 @@
         android:layout_height="wrap_content"
         android:text="Iniciar sesión"
         android:textSize="14sp"
-        android:textColor="@color/teal_700"
+        android:textColor="#831DB6"
         android:layout_marginTop="3dp"
         app:layout_constraintTop_toBottomOf="@+id/yaTienesCuenta"
         app:layout_constraintStart_toStartOf="@+id/yaTienesCuenta"
