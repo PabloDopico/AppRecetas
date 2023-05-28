@@ -88,7 +88,7 @@ public class RecipeActivity extends AppCompatActivity {
             for (int i = 0; i < ingredientes.size(); i++) {
                 String ingrediente = ingredientes.get(i);
                 //escribimos antes de cada elemento un simbolo
-                ingredientesText.append("⬤  ").append(ingrediente);
+                ingredientesText.append("").append(ingrediente);
                 if (i != ingredientes.size() - 1) {
                     //damos un salto de linea en cada elemento menos el ultimo
                     ingredientesText.append("\n");
@@ -118,7 +118,7 @@ public class RecipeActivity extends AppCompatActivity {
             StringBuilder caracteristicasText = new StringBuilder();
             for (int i = 0; i < caracteristicas.size(); i++) {
                 String caracteristica = caracteristicas.get(i);
-                caracteristicasText.append("⬤  ").append(caracteristica);
+                caracteristicasText.append("⬤  ").append(caracteristica +"  ⬤");
                 if (i != caracteristicas.size() - 1) {
                     caracteristicasText.append("\n");
                 }
@@ -134,7 +134,7 @@ public class RecipeActivity extends AppCompatActivity {
             for (Map.Entry<String, String> entry : valoresNutricionales.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-                valoresNutricionalesText.append("⬤  ").append(key).append(": ").append(value);
+                valoresNutricionalesText.append("").append(key).append(": ").append(value);
 
                 if (i != valoresNutricionales.size()) {
                     valoresNutricionalesText.append("\n");

@@ -20,9 +20,10 @@
             android:id="@+id/titulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:padding="16dp" />
+
 
         <TextView
             android:textStyle="bold"
@@ -30,8 +31,7 @@
             android:id="@+id/descripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="16dp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +60,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:padding="16dp"
                     android:textAlignment="center" />
 
             </LinearLayout>
@@ -75,15 +74,16 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:padding="12dp"
-            android:text="Valores nutricionales" />
+            android:text="Valores nutricionales"
+
+            android:lineSpacingMultiplier="1.5"/>
 
         <TextView
             android:textAlignment="center"
             android:id="@+id/valoresNutricionales"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="16dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/textoIngredientes"
@@ -97,12 +97,12 @@
             android:textColor="#A408F3" />
 
         <TextView
+            android:textStyle="bold"
             android:textAlignment="center"
             android:id="@+id/ingredientes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:padding="16dp"
             android:lineSpacingMultiplier="1.5" />
 
         <TextView
@@ -114,15 +114,17 @@
             android:padding="16dp"
             android:text="Elaboración"
             android:textAlignment="center"
-            android:textColor="#A408F3" />
+            android:textColor="#A408F3"
+            />
 
         <TextView
             android:id="@+id/tutorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:padding="16dp"
-            android:lineSpacingMultiplier="1" />
+            android:lineSpacingMultiplier="1"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp"/>
 
     </LinearLayout>
 
