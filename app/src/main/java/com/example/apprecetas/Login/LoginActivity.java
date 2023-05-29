@@ -151,7 +151,16 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                           Toast.makeText(LoginActivity.this, "Se ha iniciado sesion con Google", Toast.LENGTH_SHORT).show();
+
+                            //guardamos si esta logeado en las sharedpreferences
+                            SharedPreferences sharedPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putBoolean("estaLogeado", true);
+                            editor.apply();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            Toast.makeText(LoginActivity.this, "Se ha iniciado sesion con Google", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(LoginActivity.this, "No se ha podido iniciar  sesion con Google. Error: "  + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
