@@ -19,6 +19,7 @@ import com.example.apprecetas.R;
 import com.example.apprecetas.Recipe.Recipe;
 import com.example.apprecetas.Recipe.RecipeActivity;
 import com.example.apprecetas.Recipe.RecipeAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -51,6 +52,7 @@ public class FavoritesFragment extends Fragment implements RecipeAdapter.OnRecip
         recyclerView.setAdapter(recipeAdapter);
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = getActivity().getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+
         return v;
     }
 
@@ -61,18 +63,21 @@ public class FavoritesFragment extends Fragment implements RecipeAdapter.OnRecip
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
 
+        //guardamos en la variable idUsuario la id del usuario de firebase
+        String idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         //obtenemos todas las recetas de Firestore
         firebaseFirestore.collection("recetas").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                listaRecetas.clear();
+
                 // recorremos los documentos y verificamos si cada receta está marcada como favorita
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     String titulo = document.getString("titulo");
                     String imagen = document.getString("imagen");
 
-                    //comprobamos si la receta esta guardada en las sharedpreferences como favorita
-                    boolean esFavorito = sharedPref.getBoolean(titulo, false);
-
-                    // si esta guardada, la enviamos al constructor
+                    //comprobamos si la receta esta guardada como favorita en las sharedpreferences
+                    boolean esFavorito = comprobarFavorita(titulo, idUsuario);
                     if (esFavorito) {
                         Recipe receta = new Recipe(titulo, imagen);
                         listaRecetas.add(receta);
@@ -85,6 +90,10 @@ public class FavoritesFragment extends Fragment implements RecipeAdapter.OnRecip
         });
     }
 
+    private boolean comprobarFavorita(String titulo, String idUsuario) {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("preferencias_" +idUsuario, Context.MODE_PRIVATE);
+        return sharedPref.getBoolean(titulo, false);
+    }
     //metodo para gestionar los clicks en las recetas
     @Override
     public void onRecipeClick(int position) {

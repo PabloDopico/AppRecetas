@@ -17,6 +17,7 @@
     import com.example.apprecetas.R;
     import com.google.android.gms.tasks.OnCompleteListener;
     import com.google.android.gms.tasks.Task;
+    import com.google.firebase.auth.FirebaseAuth;
     import com.google.firebase.firestore.DocumentSnapshot;
     import com.google.firebase.firestore.FirebaseFirestore;
     import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,11 +43,13 @@
         private String recetaNombre;
         private Button addFavoriteButton;
         private boolean esFavorito;
+        private String userId;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_recipe);
             firestore = FirebaseFirestore.getInstance();
+            userId = obtenerIdUsuario();
 
             //obtenemos el titulo del extra que enviamos desde home fragment
             titulo = getIntent().getStringExtra("titulo");
@@ -70,9 +73,14 @@
                     cambiarBotonFavoritos();
                 }
             });
+            recetaNombre = "";
             getDatos();
         }
 
+        private String obtenerIdUsuario() {
+            return FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        }
 
         private void getDatos() {
 
@@ -172,30 +180,31 @@
 
         private void añadirFavoritos() {
             esFavorito = !esFavorito;
-            SharedPreferences sharedPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+
+            SharedPreferences sharedPref = getSharedPreferences("preferencias_" + userId, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(recetaNombre, esFavorito);
             editor.apply();
+
             cambiarBotonFavoritos();
 
             String mensaje;
             if (esFavorito) {
-                mensaje = "Agregada a favoritos";
+                mensaje = "Receta añadida a favoritos";
             } else {
-                mensaje = "Eliminada de favoritos";
+                mensaje = "Receta eliminada de favoritos";
             }
 
             Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
         }
 
         private void cambiarBotonFavoritos() {
-            SharedPreferences sharedPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = getSharedPreferences("preferencias_" + userId, Context.MODE_PRIVATE);
             esFavorito = sharedPref.getBoolean(recetaNombre, false);
 
             Drawable drawable;
             if (esFavorito) {
                 drawable = ContextCompat.getDrawable(this, R.drawable.corazon_roto2);
-
             } else {
                 drawable = ContextCompat.getDrawable(this, R.drawable.corazon);
             }
