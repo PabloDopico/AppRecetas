@@ -25,9 +25,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="16dp"
-                android:backgroundTint="#831DB6"
-                app:icon="@drawable/corazon"
-                app:iconTint="#FFFFFF" />
+                android:backgroundTint="#A900FF"/>
+
         </FrameLayout>
 
         <TextView
