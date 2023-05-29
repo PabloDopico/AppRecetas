@@ -194,10 +194,10 @@
 
             Drawable drawable;
             if (esFavorito) {
-                drawable = ContextCompat.getDrawable(this, R.drawable.corazon);
+                drawable = ContextCompat.getDrawable(this, R.drawable.corazon_roto2);
 
             } else {
-                drawable = ContextCompat.getDrawable(this, R.drawable.corazon_roto2);
+                drawable = ContextCompat.getDrawable(this, R.drawable.corazon);
             }
 
             if (drawable != null) {

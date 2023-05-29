@@ -9,9 +9,9 @@
         android:text="Recetas Favoritas"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:padding="16dp"
         android:textAlignment="center"
-        android:textColor="#A408F3"/>
+        android:textColor="#A408F3"
+        android:padding="6dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
