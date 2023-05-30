@@ -22,6 +22,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         this.listaRecetas = recipeList;
         this.onRecipeClickListener = listener;
     }
+    public void añadirRecetas(List<Recipe> recetas) {
+        listaRecetas = recetas;
+    }
 
     @NonNull
     @Override

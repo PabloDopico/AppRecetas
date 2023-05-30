@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +36,7 @@ public class FavoritesFragment extends Fragment implements RecipeAdapter.OnRecip
     private FirebaseFirestore firebaseFirestore;
     private ProgressBar progressBar;
     private SharedPreferences sharedPref;
+    private androidx.appcompat.widget.SearchView searchView;
 
     public FavoritesFragment() {
     }
@@ -50,6 +52,7 @@ public class FavoritesFragment extends Fragment implements RecipeAdapter.OnRecip
         listaRecetas = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(listaRecetas, this);
         recyclerView.setAdapter(recipeAdapter);
+        searchView = v.findViewById(R.id.searchView);
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = getActivity().getSharedPreferences("preferencias", Context.MODE_PRIVATE);
 
@@ -65,6 +68,20 @@ public class FavoritesFragment extends Fragment implements RecipeAdapter.OnRecip
 
         //guardamos en la variable idUsuario la id del usuario de firebase
         String idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String textoBusqueda) {
+                return false;
+            }
+            @Override
+
+            //para ir actualizando segun se escribe el texto en el searchview
+            public boolean onQueryTextChange(String texto) {
+                filtrarRecetas(texto);
+                return true;
+            }
+        });
 
         //obtenemos todas las recetas de Firestore
         firebaseFirestore.collection("recetas").get().addOnCompleteListener(task -> {
@@ -93,6 +110,20 @@ public class FavoritesFragment extends Fragment implements RecipeAdapter.OnRecip
     private boolean comprobarFavorita(String titulo, String idUsuario) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("preferencias_" +idUsuario, Context.MODE_PRIVATE);
         return sharedPref.getBoolean(titulo, false);
+    }
+
+    private void filtrarRecetas(String textoBusqueda) {
+        List<Recipe> listaFiltrada = new ArrayList<>();
+
+        //recorremos la lista de recetas y buscamos las que contienen la cadena tecleada
+        for (Recipe r : listaRecetas) {
+            if (r.getTitulo().toLowerCase().contains(textoBusqueda.toLowerCase())) {
+                listaFiltrada.add(r);
+            }
+        }
+        // añadimos al adapter las recetas buscadas para actualizar a tiempo real el recyclerview
+        recipeAdapter.añadirRecetas(listaFiltrada);
+        recipeAdapter.notifyDataSetChanged();
     }
     //metodo para gestionar los clicks en las recetas
     @Override

@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import androidx.appcompat.widget.SearchView;
 
 public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClickListener {
 
@@ -31,6 +32,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
     private List<Recipe> listaRecetas;
     private FirebaseFirestore firebaseFirestore;
     private ProgressBar progressBar;
+    private androidx.appcompat.widget.SearchView searchView;
 
     public HomeFragment() {
     }
@@ -43,10 +45,13 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
         recyclerView = v.findViewById(R.id.recyclerView);
         progressBar = v.findViewById(R.id.progressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchView = v.findViewById(R.id.searchView);
         listaRecetas = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(listaRecetas, this);
         recyclerView.setAdapter(recipeAdapter);
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+
         return v;
     }
 
@@ -57,6 +62,19 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String textoBusqueda) {
+                return false;
+            }
+            @Override
+
+            //para ir actualizando segun se escribe el texto en el searchview
+            public boolean onQueryTextChange(String texto) {
+                filtrarRecetas(texto);
+                return true;
+            }
+        });
         //obtenemos la coleccion "recetas" de la base de datos de firestore
         firebaseFirestore.collection("recetas").get().addOnCompleteListener(
                 task -> {
@@ -74,6 +92,23 @@ public class HomeFragment extends Fragment implements RecipeAdapter.OnRecipeClic
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                 });
+
+
+
+
+    }
+    private void filtrarRecetas(String textoBusqueda) {
+        List<Recipe> listaFiltrada = new ArrayList<>();
+
+        //recorremos la lista de recetas y buscamos las que contienen la cadena tecleada
+        for (Recipe r : listaRecetas) {
+            if (r.getTitulo().toLowerCase().contains(textoBusqueda.toLowerCase())) {
+                listaFiltrada.add(r);
+            }
+        }
+        // añadimos al adapter las recetas buscadas para actualizar a tiempo real el recyclerview
+        recipeAdapter.añadirRecetas(listaFiltrada);
+        recipeAdapter.notifyDataSetChanged();
     }
 
     //metodo para gestionar los clicks en las recetas
