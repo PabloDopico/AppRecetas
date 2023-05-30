@@ -10,13 +10,12 @@
         <TextView
             android:paddingStart="25dp"
             android:paddingLeft="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Favoritos"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textAlignment="center"
             android:textColor="#A408F3"/>
         <androidx.appcompat.widget.SearchView
             android:layout_gravity="center_vertical"

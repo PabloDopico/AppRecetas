@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +79,14 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 borrarCuenta();
+            }
+        });
+
+        Button cambiarContraseña = view.findViewById(R.id.cambiarContraseña);
+        cambiarContraseña.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cambiarContraseña();
             }
         });
 
@@ -181,49 +190,49 @@ public class SettingsFragment extends Fragment {
 
 
     private void cambiarNombreUsuario() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Editar nombre de usuario");
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Editar nombre de usuario");
 
-        EditText editNombreDialog = new EditText(getActivity());
-        editNombreDialog.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(editNombreDialog);
+                EditText editNombreDialog = new EditText(getActivity());
+                editNombreDialog.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(editNombreDialog);
 
-        builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String nuevoNombre = editNombreDialog.getText().toString().trim();
+                builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String nuevoNombre = editNombreDialog.getText().toString().trim();
 
-                FirebaseUser usuario = firebaseAuth.getCurrentUser();
-                if (usuario != null) {
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(nuevoNombre)
-                            .build();
+                        FirebaseUser usuario = firebaseAuth.getCurrentUser();
+                        if (usuario != null) {
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(nuevoNombre)
+                                    .build();
 
-                    usuario.updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void v) {
-                                    nombreUsuario.setText("Usuario: " +nuevoNombre);
-                                    Toast.makeText(getActivity(), "Nombre de usuario cambiado correctamente: "+nuevoNombre, Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getActivity(), "Error al cambiar el nobmre de usuario", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
+                            usuario.updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void v) {
+                                            nombreUsuario.setText("Usuario: " +nuevoNombre);
+                                            Toast.makeText(getActivity(), "Nombre de usuario cambiado correctamente: "+nuevoNombre, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getActivity(), "Error al cambiar el nobmre de usuario", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
             }
-        });
-
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
 
     private void cambiarCorreo() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -260,6 +269,69 @@ public class SettingsFragment extends Fragment {
                 dialog.cancel();
             }
         });
+        builder.show();
+    }
+
+    private void cambiarContraseña() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Cambiar contraseña");
+
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        EditText editContraseñaActual = new EditText(getActivity());
+        editContraseñaActual.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editContraseñaActual.setHint("Contraseña actual");
+        layout.addView(editContraseñaActual);
+
+        EditText editNuevaContraseña = new EditText(getActivity());
+        editNuevaContraseña.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editNuevaContraseña.setHint("Nueva contraseña");
+        layout.addView(editNuevaContraseña);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String contraseñaActual = editContraseñaActual.getText().toString().trim();
+                String nuevaContraseña = editNuevaContraseña.getText().toString().trim();
+
+                FirebaseUser usuario = firebaseAuth.getCurrentUser();
+                if (usuario != null) {
+                    AuthCredential credential = EmailAuthProvider.getCredential(usuario.getEmail(), contraseñaActual);
+                    usuario.reauthenticate(credential).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void v) {
+                            usuario.updatePassword(nuevaContraseña).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void v) {
+                                    Toast.makeText(getActivity(), "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), "Error al cambiar la contraseña", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Contraseña actual incorrecta", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
         builder.show();
     }
 
