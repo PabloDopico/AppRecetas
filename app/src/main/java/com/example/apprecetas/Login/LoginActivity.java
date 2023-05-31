@@ -167,4 +167,24 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void restablecerContraseña(View view) {
+        String email = emailEditText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(LoginActivity.this, "Por favor introduce el correo electrónico", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Se ha enviado un mensaje a tu correo para restablecer la contraseña", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Ha ocurrido un error al restablecer la contraseña", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 }
