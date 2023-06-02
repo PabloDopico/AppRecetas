@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#831DB6"
+    android:backgroundTintMode="screen"
     tools:context="Login_Or_Register">
 
     <TextView
@@ -11,37 +13,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="AppReceta"
+        android:text="FoodNote"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
         android:textColor="#831DB6"
         android:textSize="40sp"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:scaleX="0.7"
-        android:scaleY="0.7"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_comida"
+        app:layout_constraintStart_toStartOf="@id/titulo"
+       app:layout_constraintEnd_toEndOf="@id/titulo"
+       android:id="@id/imagen"
+        app:layout_constraintTop_toBottomOf="@id/titulo">
+
+    </ImageView>
+
+ <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
         android:backgroundTint="#831DB6"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
         android:text="Login"
         android:textSize="40dp"
         app:icon="@drawable/common_full_open_on_phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titulo" />
+        app:layout_constraintTop_toBottomOf="@id/imagen" />
+
     <Button
-        android:scaleX="0.7"
-        android:scaleY="0.7"
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:backgroundTint="#831DB6"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
         android:text="Register"
         android:textSize="40dp"
         app:icon="@drawable/common_full_open_on_phone"
