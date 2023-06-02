@@ -46,8 +46,11 @@ Debido a un problema de Firebase en los emuladores con ciertas versiones Android
 
 ## Tecnologías utilizadas
 
-- Android Studio (Java 11)
-- Google Firebase Authentication
+- [![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/studio)
+- [![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)](https://www.java.com/en/download/)
+- [![Firebase Authentication](https://img.shields.io/badge/Firebase%20Authentication-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/docs/auth?hl=es-419)
+- [![Firebase Firestore](https://img.shields.io/badge/Firebase%20Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/docs/firestore?hl=es-419)
+
 
 
 
