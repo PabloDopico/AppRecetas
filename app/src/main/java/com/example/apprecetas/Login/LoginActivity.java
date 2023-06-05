@@ -88,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
+        //comprobamos si los textview están vacíos
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(LoginActivity.this, "Por favor introduce el correo electrónico", Toast.LENGTH_SHORT).show();
             return;
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        //iniciamos sesion mcon FirebaseAuth
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -114,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
+                            //mostramos el error que se haya producido
                             String errorMessage = task.getException().getMessage();
                             Toast.makeText(LoginActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
                         }
@@ -121,10 +124,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // permitimos el inicio de sesión con google
     private void loginConGoogle() {
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-
         Intent loginIntent = GoogleSignIn.getClient(this, googleSignInOptions).getSignInIntent();
         startActivityForResult(loginIntent, RC_SIGN_IN);
     }
@@ -132,10 +135,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+            //comprobamos si coinciden los request codes
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
+                //intentamos obtener el token de seión y si se produce una excepcion mostramos el error
                 GoogleSignInAccount cuenta = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(cuenta.getIdToken());
             } catch (ApiException e) {
@@ -176,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // tras escribir el correo en el textview, enviamos un mensaje para restablecer la contraseña
         FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

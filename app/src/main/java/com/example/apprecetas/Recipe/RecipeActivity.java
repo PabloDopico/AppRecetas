@@ -77,6 +77,7 @@
             getDatos();
         }
 
+        //obtenemos la id de usuario de firebase
         private String obtenerIdUsuario() {
             return FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -161,9 +162,11 @@
                 StringBuilder valoresNutricionalesText = new StringBuilder();
 
                 int i = 1;
+                //recorremos el mapa y obtenemos los pares clave-valor
                 for (Map.Entry<String, String> entry : valoresNutricionales.entrySet()) {
                     String key = entry.getKey();
                     String value = entry.getValue();
+                    //construimos una cadena con los datos
                     valoresNutricionalesText.append("").append(key).append(": ").append(value);
 
                     if (i != valoresNutricionales.size()) {
@@ -172,6 +175,7 @@
 
                     i++;
                 }
+                //pasamos el stringbuilder a string normal y lo establecemos en el textview
                 valoresNutricionalesTextView.setText(valoresNutricionalesText.toString());
             } else {
                 valoresNutricionalesTextView.setText("No hay datos disponibles");
@@ -181,6 +185,7 @@
         private void añadirFavoritos() {
             esFavorito = !esFavorito;
 
+            //guardamos el estado de si es favorito o no en las sharedpreferences
             SharedPreferences sharedPref = getSharedPreferences("preferencias_" + userId, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(recetaNombre, esFavorito);
@@ -203,6 +208,7 @@
             esFavorito = sharedPref.getBoolean(recetaNombre, false);
 
             Drawable drawable;
+            // cambiamos el icono dependiendo de si es favorito o no
             if (esFavorito) {
                 drawable = ContextCompat.getDrawable(this, R.drawable.corazon_roto2);
             } else {
